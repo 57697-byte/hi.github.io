@@ -1,0 +1,505 @@
+﻿<!DOCTYPE html>
+<html lang="en" style="width:100%;height:100%;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grudge - Game Portal</title>
+
+
+<style>
+
+
+body{
+margin:0;
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+min-height:100vh;
+}
+
+
+header{
+background:#020617;
+padding:15px;
+}
+
+
+nav button{
+margin:5px;
+padding:10px 20px;
+border:none;
+background:#38bdf8;
+color:white;
+cursor:pointer;
+border-radius:5px;
+}
+
+
+section{
+display:none;
+padding:20px;
+min-height:calc(100vh - 80px);
+}
+
+
+.active{
+display:block;
+}
+
+
+canvas{
+background:black;
+border:2px solid #38bdf8;
+display:block;
+margin:auto;
+}
+
+
+iframe{
+border:2px solid #38bdf8;
+display:block;
+margin:auto;
+width:100%;
+max-width:1000px;
+height:600px;
+}
+
+
+#unity-container{
+width:100%;
+max-width:1000px;
+aspect-ratio:16/9;
+margin:auto;
+}
+
+
+#unity-canvas{
+width:100%;
+height:100%;
+background:black;
+border:2px solid #38bdf8;
+}
+
+
+#game_frame{
+width:100%;
+max-width:1000px;
+aspect-ratio:16/9;
+margin:auto;
+border:2px solid #38bdf8;
+}
+
+
+.log{
+max-width:800px;
+margin:auto;
+text-align:left;
+background:#020617;
+padding:20px;
+border-radius:10px;
+}
+
+
+.log h3{
+color:#38bdf8;
+}
+
+
+</style>
+</head>
+
+
+<body>
+
+
+<header>
+
+
+<h1>🎮 GRUDGE</h1>
+
+
+<nav>
+<button onclick="show('home')">Home</button>
+<button onclick="show('snake')">Snake</button>
+<button onclick="show('pong')">Pong</button>
+<button onclick="show('clicker')">Clicker</button>
+<button onclick="show('minecraft')">Minecraft</button>
+<button onclick="show('timeshooter')">Time Shooter 3</button>
+<button onclick="show('flappy')">Flappy Bird</button>
+<button onclick="show('tetris')">Tetris</button>
+<button onclick="show('dino')">Chrome Dino</button>
+<button onclick="show('2048')">2048</button>
+<button onclick="show('fishing')">Tiny Fishing</button>
+<button onclick="show('updates')">Update Log</button>
+</nav>
+
+
+</header>
+
+
+<section id="home" class="active">
+<h2>Welcome to Grudge</h2>
+<p>Play simple browser games instantly.</p>
+</section>
+
+
+<section id="snake">
+<h2>Snake</h2>
+<p>Score: <span id="snakeScore">0</span></p>
+<canvas id="snakeGame" width="400" height="400"></canvas>
+</section>
+
+
+<section id="pong">
+<h2>Pong</h2>
+<canvas id="pongGame" width="400" height="300"></canvas>
+</section>
+
+
+<section id="clicker">
+<h2>Clicker Game</h2>
+<p>Score: <span id="score">0</span></p>
+<button onclick="addScore()">CLICK ME</button>
+</section>
+
+
+<section id="minecraft">
+<h2>Minecraft 1.12.2</h2>
+<div id="game_frame"></div>
+</section>
+
+
+<section id="timeshooter">
+<h2>Time Shooter 3 SWAT</h2>
+<div id="unity-container">
+<canvas id="unity-canvas"></canvas>
+</div>
+</section>
+
+
+<section id="flappy">
+<h2>Flappy Bird</h2>
+<iframe src="https://flappybird.io"></iframe>
+</section>
+
+
+<section id="tetris">
+<h2>Tetris</h2>
+<iframe src="https://tetris.com/play-tetris"></iframe>
+</section>
+
+
+<section id="dino">
+<h2>Chrome Dino</h2>
+<iframe src="https://chromedino.com"></iframe>
+</section>
+
+
+<section id="2048">
+<h2>2048</h2>
+<iframe src="https://play2048.co"></iframe>
+</section>
+
+
+<section id="fishing">
+<h2>Tiny Fishing</h2>
+<iframe src="https://tinyfishinggame.github.io/file/"></iframe>
+</section>
+
+
+<section id="updates">
+
+
+<h2>📜 Grudge Update Log</h2>
+
+
+<div class="log">
+
+
+<h3>Version 1.3</h3>
+<ul>
+<li>Added Flappy Bird</li>
+<li>Added Tetris</li>
+<li>Added Chrome Dino</li>
+<li>Added 2048</li>
+<li>Added Tiny Fishing</li>
+</ul>
+
+
+<h3>Version 1.2</h3>
+<ul>
+<li>Added Time Shooter 3 SWAT</li>
+<li>Responsive game frames</li>
+</ul>
+
+
+<h3>Version 1.1</h3>
+<ul>
+<li>Added Minecraft 1.12.2</li>
+<li>Improved Snake</li>
+</ul>
+
+
+<h3>Version 1.0</h3>
+<ul>
+<li>Initial release</li>
+<li>Snake</li>
+<li>Pong</li>
+<li>Clicker</li>
+</ul>
+
+
+</div>
+
+
+</section>
+
+
+<script>
+
+
+/* navigation */
+
+
+function show(id){
+document.querySelectorAll("section").forEach(s=>s.classList.remove("active"))
+document.getElementById(id).classList.add("active")
+}
+
+
+/* clicker */
+
+
+let score = localStorage.getItem("clickScore") || 0
+document.getElementById("score").innerText = score
+
+
+function addScore(){
+score++
+localStorage.setItem("clickScore",score)
+document.getElementById("score").innerText=score
+}
+
+
+/* snake */
+
+
+const canvas=document.getElementById("snakeGame")
+const ctx=canvas.getContext("2d")
+
+
+let snake=[{x:200,y:200}]
+let food={x:100,y:100}
+let dx=20
+let dy=0
+let snakeScore=0
+
+
+document.addEventListener("keydown",e=>{
+
+
+if(e.key==="ArrowUp" && dy===0){dx=0;dy=-20}
+if(e.key==="ArrowDown" && dy===0){dx=0;dy=20}
+if(e.key==="ArrowLeft" && dx===0){dx=-20;dy=0}
+if(e.key==="ArrowRight" && dx===0){dx=20;dy=0}
+
+
+})
+
+
+function resetSnake(){
+snake=[{x:200,y:200}]
+dx=20
+dy=0
+snakeScore=0
+document.getElementById("snakeScore").innerText=0
+}
+
+
+function drawSnake(){
+
+
+if(!document.getElementById("snake").classList.contains("active")) return
+
+
+ctx.clearRect(0,0,400,400)
+
+
+snake.unshift({x:snake[0].x+dx,y:snake[0].y+dy})
+
+
+if(
+snake[0].x < 0 ||
+snake[0].x >= 400 ||
+snake[0].y < 0 ||
+snake[0].y >= 400
+){
+resetSnake()
+}
+
+
+for(let i=1;i<snake.length;i++){
+if(snake[i].x===snake[0].x && snake[i].y===snake[0].y){
+resetSnake()
+}
+}
+
+
+if(snake[0].x===food.x && snake[0].y===food.y){
+
+
+food.x=Math.floor(Math.random()*20)*20
+food.y=Math.floor(Math.random()*20)*20
+
+
+snakeScore++
+document.getElementById("snakeScore").innerText=snakeScore
+
+
+}else{
+snake.pop()
+}
+
+
+ctx.fillStyle="lime"
+snake.forEach(p=>ctx.fillRect(p.x,p.y,20,20))
+
+
+ctx.fillStyle="red"
+ctx.fillRect(food.x,food.y,20,20)
+
+
+}
+
+
+setInterval(drawSnake,120)
+
+
+/* pong */
+
+
+const pong=document.getElementById("pongGame")
+const pctx=pong.getContext("2d")
+
+
+let ballX=200
+let ballY=150
+let ballDX=3
+let ballDY=3
+let paddleX=160
+
+
+pong.addEventListener("mousemove",e=>{
+const rect=pong.getBoundingClientRect()
+paddleX=e.clientX-rect.left-40
+})
+
+
+function drawPong(){
+
+
+pctx.clearRect(0,0,400,300)
+
+
+ballX+=ballDX
+ballY+=ballDY
+
+
+if(ballX<0 || ballX>400) ballDX*=-1
+if(ballY<0) ballDY*=-1
+
+
+if(ballY>280 && ballX>paddleX && ballX<paddleX+80){
+ballDY*=-1
+}
+
+
+pctx.fillStyle="white"
+
+
+pctx.beginPath()
+pctx.arc(ballX,ballY,10,0,Math.PI*2)
+pctx.fill()
+
+
+pctx.fillRect(paddleX,280,80,10)
+
+
+}
+
+
+setInterval(drawPong,16)
+
+
+</script>
+
+
+<script>
+
+
+/* Time Shooter */
+
+
+const buildUrl="https://cdn.jsdelivr.net/gh/mistirk/google@eebffdf79a14f6e01e153d5cd4bed23c432874fb/version/time-s3"
+const loaderUrl=buildUrl+"/ts3.loader.js"
+
+
+const config={
+dataUrl:buildUrl+"/ts3.data",
+frameworkUrl:buildUrl+"/ts3.framework.js",
+codeUrl:buildUrl+"/ts3.wasm",
+streamingAssetsUrl:"StreamingAssets",
+companyName:"GoGoMan",
+productName:"Time Shooter SWAT",
+productVersion:"0.03"
+}
+
+
+const canvasTS=document.querySelector("#unity-canvas")
+
+
+const script=document.createElement("script")
+script.src=loaderUrl
+
+
+script.onload=()=>{
+createUnityInstance(canvasTS,config)
+}
+
+
+document.body.appendChild(script)
+
+
+</script>
+
+
+<script>
+
+
+/* minecraft */
+
+
+window.disableUserscripts=true
+
+
+window.__eaglercraftLoaderClient={
+container:"game_frame",
+name:"Eaglercraft 1.12",
+file:"net.peytonplayz585.eaglercraft.v1_12.client",
+cid:"bafybeidrnchyech7b26rqhm3tayt7p6mxvl23lzd4f5mcyqda7hbrzyal4",
+path:"",
+download:"https://cdn.jsdelivr.net/gh/genizy/mc@main/data/1.12.2.gz",
+dlSize:15601341,
+gzip:true
+}
+
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/genizy/mc@main/shared/loader.js"></script>
+
+
+</body>
+</html>
